@@ -64,14 +64,16 @@ function eventButton(){
       liElement.textContent=Images.all[i].name+' had '+Images.all[i].clicks+' votes, and was seen '+Images.all[i].shown+' times.';
 
     }
+    rendurChart();
+    resultButton.removeEventListener('click',eventButton);
 
   }else{
     alert('please finish the voting first');
   }
-  rendurChart();
 
 
-  resultButton.removeEventListener('click',eventButton);
+
+
 }
 
 function rendur() {
