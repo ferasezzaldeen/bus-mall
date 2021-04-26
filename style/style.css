@@ -57,3 +57,7 @@ height: 30px;
 
 
 }
+body main canvas label {
+
+    color: black;
+}
