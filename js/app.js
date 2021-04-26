@@ -7,7 +7,6 @@ const imageshow=document.getElementById('imageshow');
 const leftimage=document.getElementById('left');
 const middleimage=document.getElementById('middle');
 const rightimage=document.getElementById('right');
-imageshow.addEventListener('click',eventClicker);
 const resultButton=document.getElementById('result-button');
 resultButton.addEventListener('click',eventButton);
 const resultElement=document.getElementById('results');
@@ -18,6 +17,9 @@ let clickNumber=0;
 let leftImageIndex=0;
 let middleImageIndex=0;
 let rightImageIndex=0;
+let leftChange=0;
+let rightChange=0;
+let middleChange=0;
 
 function Images(name){
   this.name=name.split('.')[0];
@@ -47,7 +49,7 @@ function eventClicker(e){
     }
 
     clickNumber++;
-    
+
 
     rendur();
   }
@@ -66,19 +68,23 @@ function eventButton(){
   }else{
     alert('please finish the voting first');
   }
+  rendurChart();
 
+
+  resultButton.removeEventListener('click',eventButton);
 }
 
 function rendur() {
-  let leftindex= randomNumber(0,imagear.length-1);
+  let leftindex;
   let rightindex;
   let middleindex;
   do{
+    leftindex= randomNumber(0,imagear.length-1);
     rightindex=randomNumber(0,imagear.length-1);
     middleindex=randomNumber(0,imagear.length-1);
 
   }
-  while(leftindex === rightindex || leftindex === middleindex || rightindex === middleindex);
+  while(leftindex === rightindex || leftindex === middleindex || rightindex === middleindex || leftindex === leftChange || leftindex === rightChange || leftindex === middleChange || rightindex === leftChange || rightindex === rightChange || rightindex === middleChange || middleindex === leftChange || middleindex === rightChange || middleindex === middleChange);
 
   leftimage.src= Images.all[leftindex].img;
   rightimage.src= Images.all[rightindex].img;
@@ -88,17 +94,91 @@ function rendur() {
   rightImageIndex=rightindex;
   Images.all[leftindex].shown++;
   Images.all[rightindex].shown++;
+  leftChange=leftindex;
+  rightChange=rightindex;
+  middleChange=middleindex;
 
   console.log(Images.all);
 }
 
+function rendurChart(){
+
+  let clicks = [];
+  let names = [];
+  let shown = [];
+  for( let i = 0; i < Images.all.length; i++ ) {
+    clicks.push( Images.all[i].clicks );
+    names.push( Images.all[i].name );
+    shown.push( Images.all[i].shown );
 
 
 
+  }
+
+  let ctx = document.getElementById('myChart').getContext('2d');
+  let myChart = new Chart( ctx, {
+    type: 'bar',
+    data: {
+      labels: names,
+      datasets: [{
+        label: '# of Clicks',
+        data: clicks,
+        backgroundColor:
+        'rgba(54, 162, 235, 0.2)',
+        borderColor:
+        'rgba(255, 99, 132, 1)',
+
+        borderWidth: 1,
+      }]
+    },
+    options: {
+      plugins: {
+        legend: {
+          labels: {
+            color: 'black',
+            // This more specific font property overrides the global property
+            font: {
+              size: 30
+
+            },
+          }
+        }
+      },
+
+      scales: {
+
+        y: {
+
+          beginAtZero: true,
+          ticks: {
+            color: 'black',
+            font: {
+              size: 20
+
+            },
+          }
+        },
+        x: {
+
+          beginAtZero: true,
+          ticks: {
+            color: 'black',
+            font: {
+              size: 20
+
+            },
+          }
+        }
+      }
+    }
+  });
+
+
+}
+
+imageshow.addEventListener('click',eventClicker);
 
 rendur();
-
-
 
 
 
@@ -141,4 +221,3 @@ function randomNumber( min, max ) {
   max = Math.floor( max );
   return Math.floor( Math.random() * ( max - min + 1 ) + min );
 }
-
