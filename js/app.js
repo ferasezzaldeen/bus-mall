@@ -35,6 +35,10 @@ for(let i=0;i<imagear.length;i++){
 
 }
 
+function saveOutput(){
+  localStorage.setItem('output',JSON.stringify(Images.all));
+}
+
 function eventClicker(e){
   if((e.target.id === 'left'|| e.target.id ==='middle' ||e.target.id === 'right')&& clickNumber<25){
 
@@ -50,7 +54,7 @@ function eventClicker(e){
 
     clickNumber++;
 
-
+    saveOutput();
     rendur();
   }
 
@@ -116,7 +120,7 @@ function rendurChart(){
 
 
   }
-
+ 
   let ctx = document.getElementById('myChart').getContext('2d');
   let myChart = new Chart( ctx, {
     type: 'bar',
@@ -189,8 +193,20 @@ function rendurChart(){
 
 }
 
-imageshow.addEventListener('click',eventClicker);
 
+function dataSave(){
+  let oldData=JSON.parse(localStorage.getItem('output'));
+  if(oldData){
+    Images.all=oldData;
+  }
+
+
+
+}
+
+
+imageshow.addEventListener('click',eventClicker);
+dataSave();
 rendur();
 
 
